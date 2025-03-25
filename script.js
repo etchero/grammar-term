@@ -159,7 +159,7 @@ function validateAnswer() {
     const inputs = answerInputsContainer.querySelectorAll('input');
     const currentAnswers = Array.from(inputs).map(input => input.value.trim());
     
-    // 다중 답변 문제 처리
+  // 다중 답변 문제 처리
     if (question.type === 'multiple-answer') {
         const isCorrect = (() => {
             // 사용자 입력을 소문자로 변환 및 정렬
@@ -175,13 +175,14 @@ function validateAnswer() {
             // 1. 입력된 답변 개수가 정답 개수와 같아야 함
             // 2. 모든 입력된 답변이 정답 목록에 존재해야 함
             // 3. 모든 정답이 입력되었는지 확인
-            return userAnswersSorted.length === correctAnswersSorted.length &&
-                userAnswersSorted.every(userAnswer => 
-                    correctAnswersSorted.includes(userAnswer)
-                ) &&
-                correctAnswersSorted.every(correctAnswer => 
-                    userAnswersSorted.includes(correctAnswer)
-                );
+            // 모든 정답이 입력되었는지 확인
+            return correctAnswersSorted.every(correctAnswer => 
+                userAnswersSorted.includes(correctAnswer)
+            ) && 
+            // 입력된 답변이 정답 목록을 초과하지 않도록 확인
+            userAnswersSorted.every(userAnswer => 
+                correctAnswersSorted.includes(userAnswer)
+            );
         })();
         
         userAnswers.push({
