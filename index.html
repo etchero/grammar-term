@@ -3,34 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문법 기초 용어 평가</title>
+    <title>문법 기초 용어 평가 | 안동 영어종결센터</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="quiz-container">
+        <!-- 시작 화면 -->
         <div id="start-screen">
             <div class="title-box">안동 영어종결센터</div>
             <div class="subtitle">문법 기초 용어 평가</div>
-            <button id="start-btn">준비되었으면 이 버튼을 클릭!</button>
+            <button id="start-btn" aria-label="퀴즈 시작">준비되었으면 이 버튼을 클릭!</button>
         </div>
 
+        <!-- 퀴즈 화면 -->
         <div id="quiz-screen" class="hidden">
-            <div id="timer">5:00</div>
+            <div id="timer" aria-live="polite">5:00</div>
             <div id="question-container">
-                <div id="question-number"></div>
+                <div id="question-number" class="screen-reader-text"></div>
                 <div id="question"></div>
-                <div id="answer-inputs"></div>
-                <button id="next-btn">다음</button>
+                <div id="answer-inputs" role="group" aria-label="답변 입력"></div>
+                <button id="next-btn" aria-label="다음 문제">다음</button>
             </div>
         </div>
 
+        <!-- 결과 화면 -->
         <div id="result-screen" class="hidden">
             <div id="final-message">수고하셨습니다</div>
-            <div id="score-display">0%</div>
+            <div id="score-display" aria-label="최종 점수">0%</div>
             <div id="review-container">
                 <div class="review-header">오답 리뷰</div>
             </div>
-            <button id="home-btn">처음으로 돌아가기</button>
+            <button id="home-btn" aria-label="처음 화면으로 돌아가기">처음으로 돌아가기</button>
         </div>
     </div>
 
