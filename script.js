@@ -167,16 +167,20 @@ function validateAnswer() {
                 .map(answer => answer.trim().toLowerCase())
                 .filter(answer => answer !== '');
             
-            // 정답을 소문자로 변환 및 정렬
+            // 정답을 소문자로 변환
             const correctAnswersSorted = question.correctAnswers
                 .map(correct => correct.toLowerCase());
             
             // 조건 확인
             // 1. 입력된 답변 개수가 정답 개수와 같아야 함
             // 2. 모든 입력된 답변이 정답 목록에 존재해야 함
+            // 3. 모든 정답이 입력되었는지 확인
             return userAnswersSorted.length === correctAnswersSorted.length &&
                 userAnswersSorted.every(userAnswer => 
                     correctAnswersSorted.includes(userAnswer)
+                ) &&
+                correctAnswersSorted.every(correctAnswer => 
+                    userAnswersSorted.includes(correctAnswer)
                 );
         })();
         
