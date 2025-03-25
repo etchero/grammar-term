@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>안동 영어종결센터 기초 문법 용어 퀴즈</title>
+    <title>문법 기초 용어 평가</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="quiz-container">
         <div id="start-screen">
-            <h1>안동 영어종결센터 기초 문법 용어 퀴즈</h1>
-            <button id="start-btn">준비되었으면 여길 클릭하고 시작!</button>
+            <div class="title-box">안동 영어종결센터</div>
+            <div class="subtitle">문법 기초 용어 평가</div>
+            <button id="start-btn">준비되었으면 이 버튼을 클릭!</button>
         </div>
 
         <div id="quiz-screen" class="hidden">
-            <div id="timer">300</div>
+            <div id="timer">5:00</div>
             <div id="question-container">
+                <div id="question-number"></div>
                 <div id="question"></div>
                 <div id="answer-inputs"></div>
                 <button id="next-btn">다음</button>
@@ -24,10 +26,11 @@
 
         <div id="result-screen" class="hidden">
             <div id="final-message">수고하셨습니다</div>
-            <div id="score-display"></div>
-            <button id="home-btn">첫 화면으로 돌아가기</button>
-            <div id="warning-text">본인이 누르지 마세요</div>
-            <div id="review-container"></div>
+            <div id="score-display">0%</div>
+            <div id="review-container">
+                <div class="review-header">오답 리뷰</div>
+            </div>
+            <button id="home-btn">처음으로 돌아가기</button>
         </div>
     </div>
 
