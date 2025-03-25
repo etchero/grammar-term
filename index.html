@@ -11,33 +11,30 @@
 </head>
 <body>
     <div id="quiz-container">
-        <!-- 시작 화면 -->
-        <div id="start-screen">
+        <section id="start-screen">
             <div class="title-box">안동 영어종결센터</div>
-            <div class="subtitle">문법 기초 용어 평가</div>
-            <button id="start-btn" aria-label="퀴즈 시작">준비되었으면 이 버튼을 클릭!</button>
-        </div>
+            <h1 class="subtitle">문법 기초 용어 평가</h1>
+            <button id="start-btn" type="button" aria-label="퀴즈 시작">준비되었으면 이 버튼을 클릭!</button>
+        </section>
 
-        <!-- 퀴즈 화면 -->
-        <div id="quiz-screen" class="hidden">
+        <section id="quiz-screen" class="hidden">
             <div id="timer" aria-live="polite">5:00</div>
             <div id="question-container">
-                <div id="question-number" class="screen-reader-text"></div>
-                <div id="question"></div>
+                <h2 id="question-number" class="screen-reader-text"></h2>
+                <p id="question"></p>
                 <div id="answer-inputs" role="group" aria-label="답변 입력"></div>
-                <button id="next-btn" aria-label="다음 문제">다음</button>
+                <button id="next-btn" type="button" aria-label="다음 문제">다음</button>
             </div>
-        </div>
+        </section>
 
-        <!-- 결과 화면 -->
-        <div id="result-screen" class="hidden">
-            <div id="final-message">수고하셨습니다</div>
+        <section id="result-screen" class="hidden">
+            <h2 id="final-message">수고하셨습니다</h2>
             <div id="score-display" aria-label="최종 점수">0%</div>
             <div id="review-container">
-                <div class="review-header">오답 리뷰</div>
+                <h3 class="review-header">오답 리뷰</h3>
             </div>
-            <button id="home-btn" aria-label="처음 화면으로 돌아가기">처음으로 돌아가기</button>
-        </div>
+            <button id="home-btn" type="button" aria-label="처음 화면으로 돌아가기">처음으로 돌아가기</button>
+        </section>
     </div>
 
     <script src="script.js"></script>
