@@ -22,8 +22,8 @@ const questions = [
             '구와 절의 공통점은 단어 ①[   개] 이상이 모여 ②[     ]의 의미 단위라는 것이고 차이점은 구에는 ③[    ]가 없고 절에는 ③[    ]가 있다는 것이다.'
         ],
         correctAnswers: {
-            a1: ['2', '2개', '1', '1개', '하나', '한개'],
-            a2: ['하나', '한개', '1', '1개'],
+            a1: ['2', '2개', '1', '1개', '하나', '한개', '한 개'],
+            a2: ['하나', '한개', '1', '1개', '한 개'],
             a3: ['동사']
         },
         userInputs: 3
@@ -171,10 +171,10 @@ function validateAnswer() {
             const correctAnswersSorted = question.correctAnswers
                 .map(correct => correct.toLowerCase());
             
-            // 조건 확인
-            return correctAnswersSorted.length === userAnswersSorted.length && 
-                correctAnswersSorted.every(correctAnswer => 
-                    userAnswersSorted.includes(correctAnswer)
+            // 조건 확인: 길이와 내용 일치 확인
+            return userAnswersSorted.length === correctAnswersSorted.length && 
+                userAnswersSorted.every(userAnswer => 
+                    correctAnswersSorted.includes(userAnswer)
                 );
         })();
         
@@ -208,8 +208,9 @@ function validateAnswer() {
                         .map(type => type.toLowerCase())
                         .sort();
                     
-                    // 정렬된 배열 비교
-                    return JSON.stringify(userClauseTypes) === JSON.stringify(correctClauseTypes);
+                    // 정렬된 배열 일치 확인 또는 길이와 내용 확인
+                    return userClauseTypes.length === correctClauseTypes.length && 
+                        userClauseTypes.every(type => correctClauseTypes.includes(type));
                 })();
                 
                 return firstInputCorrect && secondInputCorrect;
