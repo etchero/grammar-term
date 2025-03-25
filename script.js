@@ -1,4 +1,4 @@
-// Quiz Questions and Answers
+// 퀴즈 문제 데이터
 const questions = [
     {
         type: 'multiple-answer',
@@ -17,7 +17,7 @@ const questions = [
     {
         type: 'fill-in-blank',
         questionNumber: '3',
-        question: '구와 절의 공통점은 단어 ①[   개] 이상이 모여 ②[     ]의 의미 단위라는 것이고 차이점은 구에는 ③[    ]가 없고 절에는 ③[    ]가 있다는 것이다.',
+        question: '구와 절의 차이점을 쓰시오. 구와 절의 공통점은 단어 ①[   개] 이상이 모여 ②[     ]의 의미 단위라는 것이고 차이점은 구에는 ③[    ]가 없고 절에는 ③[    ]가 있다는 것이다.',
         subQuestions: [
             '구와 절의 공통점은 단어 ①[   개] 이상이 모여 ②[     ]의 의미 단위라는 것이고 차이점은 구에는 ③[    ]가 없고 절에는 ③[    ]가 있다는 것이다.'
         ],
@@ -57,7 +57,7 @@ const questions = [
     }
 ];
 
-// DOM Elements
+// DOM 요소 선택
 const startScreen = document.getElementById('start-screen');
 const quizScreen = document.getElementById('quiz-screen');
 const resultScreen = document.getElementById('result-screen');
@@ -71,36 +71,43 @@ const answerInputsContainer = document.getElementById('answer-inputs');
 const scoreDisplay = document.getElementById('score-display');
 const reviewContainer = document.getElementById('review-container');
 
-// State Variables
+// 상태 변수
 let currentQuestionIndex = 0;
 let timeRemaining = 300;
 let timerInterval;
 let userAnswers = [];
 
-// Start Quiz
+// 퀴즈 시작 이벤트 리스너
 startBtn.addEventListener('click', startQuiz);
 
+// 퀴즈 시작 함수
 function startQuiz() {
+    // 화면 전환
     startScreen.classList.add('hidden');
     quizScreen.classList.remove('hidden');
     resultScreen.classList.add('hidden');
     
+    // 상태 초기화
     currentQuestionIndex = 0;
     userAnswers = [];
     timeRemaining = 300;
     
+    // 타이머 시작 및 첫 문제 표시
     startTimer();
     displayQuestion();
 }
 
-// Timer Function
+// 타이머 함수
 function startTimer() {
     timerInterval = setInterval(() => {
         timeRemaining--;
         const minutes = Math.floor(timeRemaining / 60);
         const seconds = timeRemaining % 60;
+        
+        // 타이머 표시 업데이트
         timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         
+        // 시간 종료 처리
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
             endQuiz();
@@ -108,18 +115,22 @@ function startTimer() {
     }, 1000);
 }
 
-// Display Question
+// 문제 표시 함수
 function displayQuestion() {
     const question = questions[currentQuestionIndex];
+    
+    // 문제 번호 및 내용 설정
     questionNumberDisplay.textContent = `${question.questionNumber}번 문제`;
     questionContainer.textContent = question.question;
     answerInputsContainer.innerHTML = '';
     
+    // 문제 유형에 따른 입력 필드 생성
     if (question.type === 'multiple-answer') {
         for (let i = 0; i < question.userInputs; i++) {
             const input = document.createElement('input');
             input.type = 'text';
             input.placeholder = '답변을 입력하세요';
+            input.setAttribute('aria-label', `${i + 1}번 답변 입력`);
             answerInputsContainer.appendChild(input);
         }
     } else if (question.type === 'fill-in-blank') {
@@ -133,22 +144,23 @@ function displayQuestion() {
             const input = document.createElement('input');
             input.type = 'text';
             input.placeholder = `${i + 1}번 입력`;
+            input.setAttribute('aria-label', `${i + 1}번 입력`);
             answerInputsContainer.appendChild(input);
         }
     }
     
-    // Event listeners for next question or end of quiz
+    // 다음 버튼 텍스트 업데이트
     nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? '제출' : '다음';
 }
 
-// Validate and Store Answers
+// 답변 검증 함수
 function validateAnswer() {
     const question = questions[currentQuestionIndex];
     const inputs = answerInputsContainer.querySelectorAll('input');
     const currentAnswers = Array.from(inputs).map(input => input.value.trim());
     
+    // 다중 답변 문제 처리
     if (question.type === 'multiple-answer') {
-        // Check if answers match the correct answers
         const isCorrect = currentAnswers.every(answer => 
             question.correctAnswers.some(correct => 
                 answer.toLowerCase() === correct.toLowerCase()
@@ -162,35 +174,37 @@ function validateAnswer() {
             correctAnswers: question.correctAnswers,
             isCorrect: isCorrect
         });
-    } else if (question.type === 'fill-in-blank') {
+    } 
+    // 빈칸 채우기 문제 처리
+    else if (question.type === 'fill-in-blank') {
         const isCorrect = (() => {
-            // Special handling for question 6 (subordinate clauses)
-            if (currentQuestionIndex === 5) { // Assumes this is the 6th question (index 5)
-                // First input (접속사)
+            // 6번 문제 특수 처리 (종속절)
+            if (currentQuestionIndex === 5) {
+                // 첫 번째 입력 (접속사)
                 const firstInputCorrect = question.correctAnswers.a1.some(correct => 
                     currentAnswers[0].trim().toLowerCase() === correct.toLowerCase()
                 );
                 
-                // Second input (절의 종류)
+                // 두 번째 입력 (절의 종류)
                 const secondInputCorrect = (() => {
-                    // Convert user's input to a set of lowercase values
+                    // 사용자 입력을 소문자로 변환 및 정렬
                     const userClauseTypes = currentAnswers[1].split(',')
                         .map(type => type.trim().toLowerCase())
                         .sort();
                     
-                    // Get correct clause types and sort them
+                    // 정답을 소문자로 변환 및 정렬
                     const correctClauseTypes = question.correctAnswers.a2
                         .map(type => type.toLowerCase())
                         .sort();
                     
-                    // Check if sorted arrays are equivalent
+                    // 정렬된 배열 비교
                     return JSON.stringify(userClauseTypes) === JSON.stringify(correctClauseTypes);
                 })();
                 
                 return firstInputCorrect && secondInputCorrect;
             }
             
-            // Default behavior for other fill-in-blank questions
+            // 기본 빈칸 채우기 문제 처리
             return currentAnswers.every((answer, index) => {
                 const correctKey = `a${index + 1}`;
                 return question.correctAnswers[correctKey].some(correct => 
@@ -209,53 +223,61 @@ function validateAnswer() {
     }
 }
 
-// Next Question or End Quiz
+// 다음 문제 또는 퀴즈 종료 이벤트 리스너
 nextBtn.addEventListener('click', moveToNextQuestion);
 
+// 다음 문제 또는 퀴즈 종료 함수
 function moveToNextQuestion() {
     validateAnswer();
     
+    // 마지막 문제가 아니면 다음 문제로 이동
     if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
         displayQuestion();
-    } else {
+    } 
+    // 마지막 문제면 퀴즈 종료
+    else {
         endQuiz();
     }
 }
 
-// End Quiz
+// 퀴즈 종료 함수
 function endQuiz() {
+    // 타이머 중지
     clearInterval(timerInterval);
+    
+    // 화면 전환
     quizScreen.classList.add('hidden');
     resultScreen.classList.remove('hidden');
     
-    // Calculate score
+    // 점수 계산
     const correctCount = userAnswers.filter(answer => answer.isCorrect).length;
     const totalQuestions = questions.length;
     const scorePercentage = Math.round((correctCount / totalQuestions) * 100);
     
-    // Display score
+    // 점수 표시
     scoreDisplay.textContent = `${scorePercentage}%`;
     
-    // Review Answers
+    // 오답 리뷰 생성
     reviewContainer.innerHTML = '<div class="review-header">오답 리뷰</div>';
-    userAnswers.forEach((answer, index) => {
+    userAnswers.forEach((answer) => {
+        // 틀린 문제만 리뷰에 추가
         if (!answer.isCorrect) {
             const reviewItem = document.createElement('div');
             reviewItem.classList.add('review-item');
             
-            // Question
+            // 문제 
             const questionEl = document.createElement('div');
             questionEl.textContent = `${answer.questionNumber}번 문제: ${answer.question}`;
             reviewItem.appendChild(questionEl);
             
-            // User's Answer
+            // 사용자 답변
             const userAnswerEl = document.createElement('div');
             userAnswerEl.textContent = `본인 답변: ${answer.userAnswer.join(', ')}`;
             userAnswerEl.classList.add('user-answer');
             reviewItem.appendChild(userAnswerEl);
             
-            // Correct Answers
+            // 정답
             const correctAnswerEl = document.createElement('div');
             correctAnswerEl.textContent = `정답: ${answer.correctAnswers.join(', ')}`;
             correctAnswerEl.classList.add('incorrect');
@@ -266,7 +288,7 @@ function endQuiz() {
     });
 }
 
-// Return to Home Screen
+// 홈 화면으로 돌아가기 이벤트 리스너
 homeBtn.addEventListener('click', () => {
     resultScreen.classList.add('hidden');
     startScreen.classList.remove('hidden');
