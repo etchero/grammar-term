@@ -22,8 +22,8 @@ const questions = [
             '구와 절의 공통점은 단어 ①[   개] 이상이 모여 ②[     ]의 의미 단위라는 것이고 차이점은 구에는 ③[    ]가 없고 절에는 ③[    ]가 있다는 것이다.'
         ],
         correctAnswers: {
-            a1: ['2', '2개'],
-            a2: ['하나', '한개'],
+            a1: ['2', '2개', '1', '1개', '하나', '한개'],
+            a2: ['하나', '한개', '1', '1개'],
             a3: ['동사']
         },
         userInputs: 3
@@ -172,12 +172,10 @@ function validateAnswer() {
                 .map(correct => correct.toLowerCase());
             
             // 조건 확인
-            return correctAnswersSorted.every(correctAnswer => 
-                userAnswersSorted.includes(correctAnswer)
-            ) && 
-            userAnswersSorted.every(userAnswer => 
-                correctAnswersSorted.includes(userAnswer)
-            );
+            return correctAnswersSorted.length === userAnswersSorted.length && 
+                correctAnswersSorted.every(correctAnswer => 
+                    userAnswersSorted.includes(correctAnswer)
+                );
         })();
         
         userAnswers.push({
