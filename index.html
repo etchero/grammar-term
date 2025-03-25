@@ -3,38 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>안동 영어종결센터 문법 기초 용어 평가</title>
+    <title>문법 퀴즈</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="start-screen" class="screen">
-        <h1>안동 영어종결센터</h1>
-        <h2>문법 기초 용어 평가</h2>
-        <button id="start-btn">준비되었으면 시작!</button>
-    </div>
-
-    <div id="test-screen" class="screen hidden">
-        <div id="timer">5:00</div>
-        <div id="question-container">
-            <div id="question"></div>
-            <input type="text" id="answer-input" placeholder="정답을 입력하세요">
-            <div id="multi-choice" class="hidden">
-                <div id="multi-choice-inputs">
-                    <input type="text" id="choice1" placeholder="1번 입력">
-                    <input type="text" id="choice2" placeholder="2번 입력">
-                    <input type="text" id="choice3" placeholder="3번 입력">
-                </div>
-            </div>
-            <button id="next-btn">다음</button>
+    <div id="quiz-container">
+        <div id="start-screen">
+            <h1>문법 퀴즈</h1>
+            <button id="start-btn">준비되었으면 시작!</button>
         </div>
-    </div>
 
-    <div id="result-screen" class="screen hidden">
-        <div id="completion-message">수고하셨습니다</div>
-        <div id="score" class="green-score"></div>
-        <div id="answer-review"></div>
-        <button id="restart-btn">처음으로 돌아가기</button>
-        <div id="warning">본인이 누르지 마세요</div>
+        <div id="quiz-screen" class="hidden">
+            <div id="timer">300</div>
+            <div id="question-container">
+                <div id="question"></div>
+                <div id="answer-inputs"></div>
+                <button id="next-btn">다음</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="hidden">
+            <div id="final-message">수고하셨습니다</div>
+            <div id="score-display"></div>
+            <button id="home-btn">첫 화면으로 돌아가기</button>
+            <div id="warning-text">본인이 누르지 마세요</div>
+            <div id="review-container"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
