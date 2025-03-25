@@ -20,20 +20,18 @@
         <section id="quiz-screen" class="hidden">
             <div id="timer" aria-live="polite">5:00</div>
             <div id="question-container">
-                <h2 id="question-number" class="screen-reader-text"></h2>
+                <h2 id="question-number"></h2>
                 <p id="question"></p>
-                <div id="answer-inputs" role="group" aria-label="답변 입력"></div>
-                <button id="next-btn" type="button" aria-label="다음 문제">다음</button>
+                <div id="answer-inputs"></div>
+                <button id="next-btn" type="button">다음</button>
             </div>
         </section>
 
         <section id="result-screen" class="hidden">
             <h2 id="final-message">수고하셨습니다</h2>
-            <div id="score-display" aria-label="최종 점수">0%</div>
-            <div id="review-container">
-                <h3 class="review-header">오답 리뷰</h3>
-            </div>
-            <button id="home-btn" type="button" aria-label="처음 화면으로 돌아가기">처음으로 돌아가기</button>
+            <div id="score-display">0%</div>
+            <div id="review-container"></div>
+            <button id="home-btn" type="button">처음으로 돌아가기</button>
         </section>
     </div>
 
