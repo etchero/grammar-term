@@ -17,13 +17,13 @@ const questions = [
     {
         type: 'fill-in-blank',
         questionNumber: '3',
-        question: '구와 절의 차이점을 쓰시오. 구와 절의 공통점은 단어 ①[개] 이상이 모여 ②[의미] 단위라는 것이고 차이점은 구에는 ③[동사]가 없고 절에는 ③[동사]가 있다는 것이다.',
+        question: '구와 절의 공통점은 단어 ①[   개] 이상이 모여 ②[     ]의 의미 단위라는 것이고 차이점은 구에는 ③[    ]가 없고 절에는 ③[    ]가 있다는 것이다.',
         subQuestions: [
-            '구와 절의 공통점은 단어 ①[ 개] 이상이 모여 ②[  ]의 의미 단위라는 것이고 차이점은 구에는 ③[  ]가 없고 절에는 ③[  ]가 있다는 것이다.'
+            '구와 절의 공통점은 단어 ①[   개] 이상이 모여 ②[     ]의 의미 단위라는 것이고 차이점은 구에는 ③[    ]가 없고 절에는 ③[    ]가 있다는 것이다.'
         ],
         correctAnswers: {
             a1: ['2', '2개'],
-            a2: ['의미', '1', '하나'],
+            a2: ['하나', '한개'],
             a3: ['동사']
         },
         userInputs: 3
@@ -163,12 +163,41 @@ function validateAnswer() {
             isCorrect: isCorrect
         });
     } else if (question.type === 'fill-in-blank') {
-        const isCorrect = currentAnswers.every((answer, index) => {
-            const correctKey = `a${index + 1}`;
-            return question.correctAnswers[correctKey].some(correct => 
-                answer.trim().toLowerCase() === correct.toLowerCase()
-            );
-        });
+        const isCorrect = (() => {
+            // Special handling for question 6 (subordinate clauses)
+            if (currentQuestionIndex === 5) { // Assumes this is the 6th question (index 5)
+                // First input (접속사)
+                const firstInputCorrect = question.correctAnswers.a1.some(correct => 
+                    currentAnswers[0].trim().toLowerCase() === correct.toLowerCase()
+                );
+                
+                // Second input (절의 종류)
+                const secondInputCorrect = (() => {
+                    // Convert user's input to a set of lowercase values
+                    const userClauseTypes = currentAnswers[1].split(',')
+                        .map(type => type.trim().toLowerCase())
+                        .sort();
+                    
+                    // Get correct clause types and sort them
+                    const correctClauseTypes = question.correctAnswers.a2
+                        .map(type => type.toLowerCase())
+                        .sort();
+                    
+                    // Check if sorted arrays are equivalent
+                    return JSON.stringify(userClauseTypes) === JSON.stringify(correctClauseTypes);
+                })();
+                
+                return firstInputCorrect && secondInputCorrect;
+            }
+            
+            // Default behavior for other fill-in-blank questions
+            return currentAnswers.every((answer, index) => {
+                const correctKey = `a${index + 1}`;
+                return question.correctAnswers[correctKey].some(correct => 
+                    answer.trim().toLowerCase() === correct.toLowerCase()
+                );
+            });
+        })();
         
         userAnswers.push({
             questionNumber: question.questionNumber,
