@@ -161,29 +161,23 @@ function validateAnswer() {
     
     // 다중 답변 문제 처리
     if (question.type === 'multiple-answer') {
-        // 문제 번호 1, 2, 4, 5번은 순서 무관으로 처리
         const isCorrect = (() => {
-            if (['1', '2', '4', '5'].includes(question.questionNumber)) {
-                // 사용자 입력을 소문자로 변환 및 정렬
-                const userAnswersSorted = currentAnswers
-                    .map(answer => answer.trim().toLowerCase())
-                    .sort();
-                
-                // 정답을 소문자로 변환 및 정렬
-                const correctAnswersSorted = question.correctAnswers
-                    .map(correct => correct.toLowerCase())
-                    .sort();
-                
-                // 입력된 답변들이 모두 존재하고 정답 목록과 일치하는지 확인
-                return JSON.stringify(userAnswersSorted) === JSON.stringify(correctAnswersSorted);
-            } else {
-                // 다른 문제들은 기존 로직 유지
-                return currentAnswers.every(answer => 
-                    question.correctAnswers.some(correct => 
-                        answer.toLowerCase() === correct.toLowerCase()
-                    ) && answer !== ''
+            // 사용자 입력을 소문자로 변환 및 정렬
+            const userAnswersSorted = currentAnswers
+                .map(answer => answer.trim().toLowerCase())
+                .filter(answer => answer !== '');
+            
+            // 정답을 소문자로 변환 및 정렬
+            const correctAnswersSorted = question.correctAnswers
+                .map(correct => correct.toLowerCase());
+            
+            // 조건 확인
+            // 1. 입력된 답변 개수가 정답 개수와 같아야 함
+            // 2. 모든 입력된 답변이 정답 목록에 존재해야 함
+            return userAnswersSorted.length === correctAnswersSorted.length &&
+                userAnswersSorted.every(userAnswer => 
+                    correctAnswersSorted.includes(userAnswer)
                 );
-            }
         })();
         
         userAnswers.push({
