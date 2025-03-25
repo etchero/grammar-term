@@ -153,48 +153,13 @@ function displayQuestion() {
     nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? '제출' : '다음';
 }
 
-// 정답 비교 함수 수정
+// 정답 비교 함수
 function validateAnswer() {
     const question = questions[currentQuestionIndex];
     const inputs = answerInputsContainer.querySelectorAll('input');
     const currentAnswers = Array.from(inputs).map(input => input.value.trim());
 
-    if (question.type === 'multiple-answer') {
-        // 사용자가 입력한 값들을 소문자로 변환 후 정렬
-        const userAnswersSorted = currentAnswers.map(ans => ans.toLowerCase()).sort();
-        const correctAnswersSorted = question.correctAnswers.map(ans => ans.toLowerCase()).sort();
-
-        // 모든 정답이 포함되어 있고, 추가 입력이 없는지 확인
-        const isCorrect = JSON.stringify(userAnswersSorted) === JSON.stringify(correctAnswersSorted);
-
-        userAnswers.push({ questionNumber: question.questionNumber, userAnswer: currentAnswers, isCorrect });
-    } 
-    else if (question.type === 'fill-in-blank') {
-        let isCorrect = false;
-
-        if (currentQuestionIndex === 2) { // 3번 문제 (숫자 개수)
-            isCorrect = (
-                ['2', '2개'].includes(currentAnswers[0]) &&
-                ['1', '1개', '하나', '한 개'].includes(currentAnswers[1]) &&
-                currentAnswers[2] === '동사'
-            );
-        } else if (currentQuestionIndex === 5) { // 6번 문제 (절의 종류)
-            const firstCorrect = question.correctAnswers.a1.includes(currentAnswers[0].toLowerCase());
-            const userClauseTypes = currentAnswers[1].split(',').map(x => x.trim().toLowerCase()).sort();
-            const correctClauseTypes = question.correctAnswers.a2.map(x => x.toLowerCase()).sort();
-            const secondCorrect = JSON.stringify(userClauseTypes) === JSON.stringify(correctClauseTypes);
-            isCorrect = firstCorrect && secondCorrect;
-        } else {
-            isCorrect = currentAnswers.every((ans, idx) => 
-                question.correctAnswers[`a${idx + 1}`].includes(ans)
-            );
-        }
-        
-        userAnswers.push({ questionNumber: question.questionNumber, userAnswer: currentAnswers, isCorrect });
-    }
-}
-    
-  // 다중 답변 문제 처리
+    // 다중 답변 문제 처리
     if (question.type === 'multiple-answer') {
         const isCorrect = (() => {
             // 사용자 입력을 소문자로 변환 및 정렬
@@ -207,14 +172,9 @@ function validateAnswer() {
                 .map(correct => correct.toLowerCase());
             
             // 조건 확인
-            // 1. 입력된 답변 개수가 정답 개수와 같아야 함
-            // 2. 모든 입력된 답변이 정답 목록에 존재해야 함
-            // 3. 모든 정답이 입력되었는지 확인
-            // 모든 정답이 입력되었는지 확인
             return correctAnswersSorted.every(correctAnswer => 
                 userAnswersSorted.includes(correctAnswer)
             ) && 
-            // 입력된 답변이 정답 목록을 초과하지 않도록 확인
             userAnswersSorted.every(userAnswer => 
                 correctAnswersSorted.includes(userAnswer)
             );
