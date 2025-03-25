@@ -153,11 +153,46 @@ function displayQuestion() {
     nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? '제출' : '다음';
 }
 
-// 답변 검증 함수
+// 정답 비교 함수 수정
 function validateAnswer() {
     const question = questions[currentQuestionIndex];
     const inputs = answerInputsContainer.querySelectorAll('input');
     const currentAnswers = Array.from(inputs).map(input => input.value.trim());
+
+    if (question.type === 'multiple-answer') {
+        // 사용자가 입력한 값들을 소문자로 변환 후 정렬
+        const userAnswersSorted = currentAnswers.map(ans => ans.toLowerCase()).sort();
+        const correctAnswersSorted = question.correctAnswers.map(ans => ans.toLowerCase()).sort();
+
+        // 모든 정답이 포함되어 있고, 추가 입력이 없는지 확인
+        const isCorrect = JSON.stringify(userAnswersSorted) === JSON.stringify(correctAnswersSorted);
+
+        userAnswers.push({ questionNumber: question.questionNumber, userAnswer: currentAnswers, isCorrect });
+    } 
+    else if (question.type === 'fill-in-blank') {
+        let isCorrect = false;
+
+        if (currentQuestionIndex === 2) { // 3번 문제 (숫자 개수)
+            isCorrect = (
+                ['2', '2개'].includes(currentAnswers[0]) &&
+                ['1', '1개', '하나', '한 개'].includes(currentAnswers[1]) &&
+                currentAnswers[2] === '동사'
+            );
+        } else if (currentQuestionIndex === 5) { // 6번 문제 (절의 종류)
+            const firstCorrect = question.correctAnswers.a1.includes(currentAnswers[0].toLowerCase());
+            const userClauseTypes = currentAnswers[1].split(',').map(x => x.trim().toLowerCase()).sort();
+            const correctClauseTypes = question.correctAnswers.a2.map(x => x.toLowerCase()).sort();
+            const secondCorrect = JSON.stringify(userClauseTypes) === JSON.stringify(correctClauseTypes);
+            isCorrect = firstCorrect && secondCorrect;
+        } else {
+            isCorrect = currentAnswers.every((ans, idx) => 
+                question.correctAnswers[`a${idx + 1}`].includes(ans)
+            );
+        }
+        
+        userAnswers.push({ questionNumber: question.questionNumber, userAnswer: currentAnswers, isCorrect });
+    }
+}
     
   // 다중 답변 문제 처리
     if (question.type === 'multiple-answer') {
