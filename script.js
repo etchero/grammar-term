@@ -1,366 +1,239 @@
-// 스타일 추가 (맨 처음에 한 번만 선언)
-const styleElement = document.createElement('style');
-styleElement.textContent = `
-    #answer-review {
-        position: relative;
-        height: 400px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    .answer-review-container {
-        height: 100%;
-        overflow-y: auto;
-        padding: 10px;
-    }
-    .answer-review-header {
-        font-size: 0.8em;
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-align: center;
-        position: sticky;
-        top: 0;
-        background-color: white;
-        z-index: 10;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #eee;
-    }
-    .answer-review-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .answer-review-item {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 10px;
-        background-color: #f9f9f9;
-        font-size: 0.8em;
-    }
-    .review-question {
-        font-weight: bold;
-        margin-bottom: 8px;
-        color: #333;
-    }
-    .review-details {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 4px;
-    }
-    .review-label {
-        font-weight: bold;
-        color: #666;
-    }
-    .user-answer {
-        color: red;
-        font-weight: normal;
-    }
-    .correct-answer {
-        color: green;
-        font-weight: bold;
-    }
-    
-    /* 스크롤바 스타일링 */
-    .answer-review-container::-webkit-scrollbar {
-        width: 8px;
-    }
-    .answer-review-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 5px;
-    }
-    .answer-review-container::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 5px;
-    }
-    .answer-review-container::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-`;
-document.head.appendChild(styleElement);
-
+// Quiz Questions and Answers
 const questions = [
     {
-        question: "1. 품사 8개를 쓰시오. (콤마로 구분/ 순서 무관하며 용어 전체를 쓸 것)",
-        type: "text",
-        correctAnswers: [
-            "명사, 대명사, 동사, 형용사, 부사, 전치사, 접속사, 감탄사",
-            "감탄사, 접속사, 전치사, 부사, 형용사, 동사, 대명사, 명사"
-        ],
-        userAnswer: ""
+        type: 'multiple-answer',
+        question: '품사 8개를 쓰시오. (콤마로 구분/ 순서 무관/ 용어 전체 이름을 쓸 것)',
+        correctAnswers: ['명사', '대명사', '동사', '형용사', '부사', '전치사', '접속사', '감탄사'],
+        userInputs: 1
     },
     {
-        question: "2. 문장 성분 5개를 쓰시오. (콤마로 구분/ 순서 무관하며 용어 전체를 쓸 것)",
-        type: "text",
-        correctAnswers: [
-            "주어, 서술어, 목적어, 보어, 수식어",
-            "주어, 동사, 목적어, 보어, 수식어"
-        ],
-        userAnswer: ""
+        type: 'multiple-answer',
+        question: '문장 성분 5개를 쓰시오. (콤마로 구분/ 순서 무관/ 용어 전체 이름을 쓸 것)',
+        correctAnswers: ['주어', '서술어', '동사', '목적어', '보어', '수식어'],
+        userInputs: 1
     },
     {
-        "question": "3. 구와 절의 차이점을 쓰시오. 구와 절의 공통점은 단어 ①[ ]개 이상이 모여 ②[ ]의 의미 단위라는 것이고 차이점은 구에는 ③[  ]가 없고 절에는 ③[  ]가 있다는 것이다.(③정답은 공통)",
-        "type": "multi-choice",
-        "correctMultiAnswers": [
-            ["2개", "2", "단어 2개"],   // 첫 번째 문항 정답들
-            ["하나", "1", "한개"],     // 두 번째 문항 정답들
-            ["동사", "동"]             // 세 번째 문항 정답들
+        type: 'fill-in-blank',
+        question: '구와 절의 차이점이 무엇인지 빈칸을 각각 완성하세요.',
+        subQuestions: [
+            '구와 절의 공통점은 단어 ①[ ]개 이상이 모여 ②[ ]의 의미단위라는 것이고 차이점은 구에는 ③[ ]가 없고 절에는 ③[ ]가 있다는 것이다.',
+            '정답: ① 2(or 2개 모두 인정) ② 하나(or 1 모두 인정) ③ 동사'
         ],
-        "correctAnswers": ["2개", "하나", "동사"],
-        "userAnswer": []
+        correctAnswers: {
+            a1: ['2', '2개'],
+            a2: ['1', '하나'],
+            a3: ['동사']
+        },
+        userInputs: 3
     },
     {
-        question: "4. 구의 3가지 종류를 쓰세요. (콤마로 구분/ 순서 무관하며 용어 전체를 쓸 것)",
-        type: "text",
-        correctAnswers: [
-            "명사구, 형용사구, 부사구",
-            "부사구, 형용사구, 명사구"
-        ],
-        userAnswer: ""
+        type: 'multiple-answer',
+        question: '구의 3가지 종류를 쓰세요. (콤마로 구분/ 순서 무관/ 용어 전체 이름을 쓸 것)',
+        correctAnswers: ['명사구', '형용사구', '부사구'],
+        userInputs: 1
     },
     {
-        question: "5. 절의 3가지 종류를 쓰세요. (콤마로 구분/ 순서 무관하며 용어 전체를 쓸 것)",
-        type: "text",
-        correctAnswers: [
-            "명사절, 형용사절, 부사절",
-            "부사절, 형용사절, 명사절"
+        type: 'multiple-answer',
+        question: '절의 3가지 종류를 쓰세요. (콤마로 구분/ 순서 무관/ 용어 전체 이름을 쓸 것)',
+        correctAnswers: ['명사절', '형용사절', '부사절'],
+        userInputs: 1
+    },
+    {
+        type: 'fill-in-blank',
+        question: '종속절은 무엇인지 빈칸을 완성하세요.(② 순서 무관)',
+        subQuestions: [
+            '종속절은 ①[ ]뒤에 오는 절로 크게 ②[ ] [ ] [ ] 3가지가 있다.',
+            '정답: ① 접속사 ② 명사절, 형용사절, 부사절'
         ],
-        userAnswer: ""
+        correctAnswers: {
+            a1: ['접속사'],
+            a2: ['명사절, 형용사절, 부사절', '형용사절, 명사절, 부사절', '부사절, 명사절, 형용사절']
+        },
+        userInputs: 2
     }
 ];
 
-let currentQuestionIndex = 0;
-let timeLeft = 300; // 5분 = 300초
-let timerInterval;
-
-// DOM 요소 선택
+// DOM Elements
 const startScreen = document.getElementById('start-screen');
-const testScreen = document.getElementById('test-screen');
+const quizScreen = document.getElementById('quiz-screen');
 const resultScreen = document.getElementById('result-screen');
+const startBtn = document.getElementById('start-btn');
+const nextBtn = document.getElementById('next-btn');
+const homeBtn = document.getElementById('home-btn');
 const timerDisplay = document.getElementById('timer');
 const questionContainer = document.getElementById('question');
-const answerInput = document.getElementById('answer-input');
-const multiChoiceContainer = document.getElementById('multi-choice');
-const choice1Input = document.getElementById('choice1');
-const choice2Input = document.getElementById('choice2');
-const choice3Input = document.getElementById('choice3');
-const nextBtn = document.getElementById('next-btn');
-const startBtn = document.getElementById('start-btn');
-const restartBtn = document.getElementById('restart-btn');
-const scoreDisplay = document.getElementById('score');
-const answerReviewDisplay = document.getElementById('answer-review');
+const answerInputsContainer = document.getElementById('answer-inputs');
+const scoreDisplay = document.getElementById('score-display');
+const reviewContainer = document.getElementById('review-container');
 
-// 시간 포맷팅 함수
-function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+// State Variables
+let currentQuestionIndex = 0;
+let timeRemaining = 300;
+let timerInterval;
+let userAnswers = [];
+
+// Start Quiz
+startBtn.addEventListener('click', startQuiz);
+
+function startQuiz() {
+    startScreen.classList.add('hidden');
+    quizScreen.classList.remove('hidden');
+    resultScreen.classList.add('hidden');
+    
+    currentQuestionIndex = 0;
+    userAnswers = [];
+    timeRemaining = 300;
+    
+    startTimer();
+    displayQuestion();
 }
 
-// 타이머 시작 함수
+// Timer Function
 function startTimer() {
     timerInterval = setInterval(() => {
-        timeLeft--;
-        timerDisplay.textContent = formatTime(timeLeft);
-
-        if (timeLeft <= 0) {
+        timeRemaining--;
+        timerDisplay.textContent = timeRemaining;
+        
+        if (timeRemaining <= 0) {
             clearInterval(timerInterval);
-            endTest();
+            endQuiz();
         }
     }, 1000);
 }
 
-// 문제 로드 함수
-function loadQuestion() {
+// Display Question
+function displayQuestion() {
     const question = questions[currentQuestionIndex];
     questionContainer.textContent = question.question;
+    answerInputsContainer.innerHTML = '';
     
-    // 입력 필드 초기화
-    answerInput.value = '';
-    answerInput.classList.remove('hidden');
-    multiChoiceContainer.classList.add('hidden');
-    
-    choice1Input.value = '';
-    choice2Input.value = '';
-    choice3Input.value = '';
-
-    // 3번 문제의 경우 특별 처리
-    if (question.type === 'multi-choice') {
-        answerInput.classList.add('hidden');
-        multiChoiceContainer.classList.remove('hidden');
+    if (question.type === 'multiple-answer') {
+        for (let i = 0; i < question.userInputs; i++) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = `답변 ${i + 1}`;
+            answerInputsContainer.appendChild(input);
+        }
+    } else if (question.type === 'fill-in-blank') {
+        question.subQuestions.forEach((subQ, index) => {
+            if (index === 0) {
+                const questionText = document.createElement('div');
+                questionText.textContent = subQ;
+                answerInputsContainer.appendChild(questionText);
+            }
+        });
+        
+        for (let i = 0; i < question.userInputs; i++) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = `① ② ③ 중 하나 입력`;
+            answerInputsContainer.appendChild(input);
+        }
     }
+    
+    // Event listeners for next question or end of quiz
+    nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? '제출' : '다음';
 }
 
-// 정답 체크 함수
-function checkAnswer() {
+// Validate and Store Answers
+function validateAnswer() {
     const question = questions[currentQuestionIndex];
+    const inputs = answerInputsContainer.querySelectorAll('input');
+    const currentAnswers = Array.from(inputs).map(input => input.value.trim());
     
-    if (question.type === 'text') {
-        const userAnswer = answerInput.value.trim();
-        question.userAnswer = userAnswer;
-        
-        // 정답 확인 (대소문자 구분 없고, 쉼표로 구분된 순서 무관)
-        const isCorrect = question.correctAnswers.some(correctAnswer => 
-            userAnswer.toLowerCase() === correctAnswer.toLowerCase()
+    if (question.type === 'multiple-answer') {
+        // Check if answers match the correct answers
+        const isCorrect = currentAnswers.every(answer => 
+            question.correctAnswers.some(correct => 
+                answer.toLowerCase() === correct.toLowerCase()
+            ) && answer !== ''
         );
         
-        return isCorrect;
-    } else if (question.type === 'multi-choice') {
-        const userAnswers = [
-            choice1Input.value.trim(),
-            choice2Input.value.trim(),
-            choice3Input.value.trim()
-        ];
-        question.userAnswer = userAnswers;
-        
-        // 3번 문제의 경우 각 문항별로 정답 확인
-        const isCorrectMulti = userAnswers.every((answer, index) => {
-            // 해당 인덱스의 허용 가능한 정답들과 비교
-            return question.correctMultiAnswers[index].some(correctAns => 
-                answer.toLowerCase() === correctAns.toLowerCase()
+        userAnswers.push({
+            question: question.question,
+            userAnswer: currentAnswers,
+            correctAnswers: question.correctAnswers,
+            isCorrect: isCorrect
+        });
+    } else if (question.type === 'fill-in-blank') {
+        const isCorrect = currentAnswers.every((answer, index) => {
+            const correctKey = `a${index + 1}`;
+            return question.correctAnswers[correctKey].some(correct => 
+                answer.trim().toLowerCase() === correct.toLowerCase()
             );
         });
         
-        return isCorrectMulti;
+        userAnswers.push({
+            question: question.question,
+            userAnswer: currentAnswers,
+            correctAnswers: Object.values(question.correctAnswers).flat(),
+            isCorrect: isCorrect
+        });
     }
 }
 
-// 다음 문제로 넘어가는 함수
-function nextQuestion() {
-    // 정답 체크
-    const isCorrect = checkAnswer();
+// Next Question or End Quiz
+nextBtn.addEventListener('click', moveToNextQuestion);
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !resultScreen.classList.contains('hidden')) {
+        moveToNextQuestion();
+    }
+});
+
+function moveToNextQuestion() {
+    validateAnswer();
     
-    // 다음 문제로 이동
-    currentQuestionIndex++;
-    
-    if (currentQuestionIndex < questions.length) {
-        loadQuestion();
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        displayQuestion();
     } else {
-        endTest();
+        endQuiz();
     }
 }
 
-// 시험 종료 함수
-function endTest() {
+// End Quiz
+function endQuiz() {
     clearInterval(timerInterval);
-    testScreen.classList.add('hidden');
+    quizScreen.classList.add('hidden');
     resultScreen.classList.remove('hidden');
-
-    // 점수 계산
-    const totalQuestions = questions.length;
-    const correctAnswers = questions.filter(q => {
-        if (q.type === 'text') {
-            return q.correctAnswers.some(correct => 
-                q.userAnswer.toLowerCase() === correct.toLowerCase());
-        } else if (q.type === 'multi-choice') {
-            // 3번 문제의 경우 각 문항별로 정답 확인
-            return q.userAnswer.every((answer, index) => 
-                q.correctMultiAnswers[index].some(correctAns => 
-                    answer.toLowerCase() === correctAns.toLowerCase()
-                )
-            );
-        }
-        return false;
-    }).length;
-
-    const scorePercentage = Math.round((correctAnswers / totalQuestions) * 100);
-
-    // 점수 및 완료 메시지 표시
-    scoreDisplay.innerHTML = `
-        <div style="font-size: 2em; font-weight: bold; text-align: center;">
-            ${scorePercentage}%
-        </div>
-        <div style="font-size: 0.6em; text-align: center; margin-top: 10px;">
-            ${totalQuestions}문제 중 ${correctAnswers}문제 맞히셨습니다.<br>
-            수고하셨습니다!
-        </div>
-    `;
     
-    // 오답 리뷰 생성
-    let reviewHTML = `
-        <div class="answer-review-container">
-            <div class="answer-review-header">오답 리뷰</div>
-            <div class="answer-review-list">
-    `;
-    questions.forEach((q, index) => {
-        let isCorrect = false;
-        let userAnswerDisplay = '';
-        let correctAnswerDisplay = '';
-
-        if (q.type === 'text') {
-            isCorrect = q.correctAnswers.some(correct => 
-                q.userAnswer.toLowerCase() === correct.toLowerCase());
-            userAnswerDisplay = q.userAnswer || '(미입력)';
-            correctAnswerDisplay = q.correctAnswers[0];
-        } else if (q.type === 'multi-choice') {
-            // 3번 문제의 각 문항 개별 채점
-            isCorrect = q.userAnswer.every((answer, index) => 
-                q.correctMultiAnswers[index].some(correctAns => 
-                    answer.toLowerCase() === correctAns.toLowerCase()
-                )
-            );
-            userAnswerDisplay = q.userAnswer.join(', ') || '(미입력)';
-            correctAnswerDisplay = q.correctAnswers.join(', ');
-        }
+    // Calculate score
+    const correctCount = userAnswers.filter(answer => answer.isCorrect).length;
+    const totalQuestions = questions.length;
+    const scorePercentage = Math.round((correctCount / totalQuestions) * 100);
+    
+    // Display score
+    scoreDisplay.textContent = `정답률: ${scorePercentage}% (${correctCount}/${totalQuestions})`;
+    
+    // Review Answers
+    reviewContainer.innerHTML = '';
+    userAnswers.forEach((answer, index) => {
+        const reviewItem = document.createElement('div');
+        reviewItem.classList.add('review-item');
         
-        if (!isCorrect) {
-            reviewHTML += `
-                <div class="answer-review-item">
-                    <div class="review-question">${q.question}</div>
-                    <div class="review-details">
-                        <div class="review-label">본인 답변:</div>
-                        <div class="user-answer">${userAnswerDisplay}</div>
-                        <div class="review-label">정답:</div>
-                        <div class="correct-answer">${correctAnswerDisplay}</div>
-                    </div>
-                </div>
-            `;
-        }
+        // Question
+        const questionEl = document.createElement('div');
+        questionEl.textContent = `문제 ${index + 1}: ${answer.question}`;
+        reviewItem.appendChild(questionEl);
+        
+        // User's Answer
+        const userAnswerEl = document.createElement('div');
+        userAnswerEl.textContent = `내 답변: ${answer.userAnswer.join(', ')}`;
+        userAnswerEl.classList.add('user-answer');
+        reviewItem.appendChild(userAnswerEl);
+        
+        // Correct Answers
+        const correctAnswerEl = document.createElement('div');
+        correctAnswerEl.textContent = `정답: ${answer.correctAnswers.join(', ')}`;
+        correctAnswerEl.classList.add(answer.isCorrect ? 'correct' : 'incorrect');
+        reviewItem.appendChild(correctAnswerEl);
+        
+        reviewContainer.appendChild(reviewItem);
     });
-    reviewHTML += `
-            </div>
-        </div>
-    `;
-    answerReviewDisplay.innerHTML = reviewHTML;
 }
 
-// 시험 시작 함수
-function startTest() {
-    startScreen.classList.add('hidden');
-    testScreen.classList.remove('hidden');
-    currentQuestionIndex = 0;
-    loadQuestion();
-    startTimer();
-}
-
-// 이벤트 리스너 설정
-startBtn.addEventListener('click', startTest);
-restartBtn.addEventListener('click', () => {
-    // 모든 상태 초기화
+// Return to Home Screen
+homeBtn.addEventListener('click', () => {
     resultScreen.classList.add('hidden');
     startScreen.classList.remove('hidden');
-    
-    // 타이머와 질문 상태 초기화
-    timeLeft = 300;
-    currentQuestionIndex = 0;
-    questions.forEach(q => q.userAnswer = q.type === 'text' ? '' : []);
 });
-
-// 다음 버튼 및 엔터키 이벤트 통합
-function handleNext(e) {
-    // 현재 화면이 test-screen일 때만 작동
-    if (!testScreen.classList.contains('hidden')) {
-        nextQuestion();
-    }
-}
-
-nextBtn.addEventListener('click', handleNext);
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        handleNext(e);
-    }
-});
-
-// 초기 화면 설정
-startScreen.classList.remove('hidden');
-testScreen.classList.add('hidden');
-resultScreen.classList.add('hidden');
