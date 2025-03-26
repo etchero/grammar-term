@@ -3,40 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>안동 영어종결센터 기초 문법 용어 Test</title>
+    <title>안동 영어종결센터 기초 문법 용어 평가</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="main-container">
-        <div class="card-container">
+    <div class="container">
+        <div class="quiz-card">
             <div id="start-screen" class="screen active">
-                <div class="screen-content">
-                    <h1>안동 영어종결센터<br>기초 문법 용어 Test</h1>
-                    <button id="start-btn" class="btn btn-primary">준비되었으면 시작!</button>
+                <div class="center-content">
+                    <img src="logo.png" alt="안동 영어종결센터 로고" class="logo">
+                    <h1>문법 기초 용어 평가</h1>
+                    <button id="start-btn" class="btn">준비되었으면 시작!</button>
                 </div>
             </div>
 
             <div id="quiz-screen" class="screen">
-                <div class="screen-content">
-                    <div class="quiz-header">
-                        <div id="timer">5:00</div>
-                        <div id="question-number"></div>
-                    </div>
+                <div class="quiz-header">
+                    <div id="timer">4:59</div>
+                </div>
+                <div class="quiz-body">
+                    <div id="question-number" class="question-number"></div>
                     <div id="question" class="question-text"></div>
                     <div class="answer-section">
-                        <input type="text" id="answer-input" placeholder="정답을 입력하세요">
-                        <button id="next-btn" class="btn btn-secondary">다음</button>
+                        <input type="text" id="answer-input" placeholder="답변을 입력하세요">
+                        <button id="next-btn" class="btn">다음</button>
                     </div>
                 </div>
             </div>
 
             <div id="result-screen" class="screen">
-                <div class="screen-content">
+                <div class="center-content">
                     <h2>수고하셨습니다!</h2>
                     <div id="final-score" class="score"></div>
                     <div id="review" class="review-section"></div>
-                    <button id="restart-btn" class="btn btn-primary">처음으로 돌아가기</button>
+                    <button id="restart-btn" class="btn">처음으로 돌아가기</button>
                 </div>
             </div>
         </div>
