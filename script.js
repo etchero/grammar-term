@@ -162,7 +162,7 @@ function validateAnswer() {
     // 다중 답변 문제 처리
     if (question.type === 'multiple-answer') {
         const isCorrect = (() => {
-            // 사용자 입력을 소문자로 변환 및 정렬
+            // 사용자 입력 정렬 및 중복 제거
             const userAnswersSorted = currentAnswers
                 .map(answer => answer.trim().toLowerCase())
                 .filter(answer => answer !== '');
@@ -171,7 +171,7 @@ function validateAnswer() {
             const correctAnswersSorted = question.correctAnswers
                 .map(correct => correct.toLowerCase());
             
-            // 조건 확인: 길이와 내용 일치 확인
+            // 조건 확인: 길이와 집합 일치 확인
             return userAnswersSorted.length === correctAnswersSorted.length && 
                 userAnswersSorted.every(userAnswer => 
                     correctAnswersSorted.includes(userAnswer)
@@ -198,17 +198,15 @@ function validateAnswer() {
                 
                 // 두 번째 입력 (절의 종류)
                 const secondInputCorrect = (() => {
-                    // 사용자 입력을 소문자로 변환 및 정렬
+                    // 사용자 입력을 소문자로 변환
                     const userClauseTypes = currentAnswers[1].split(',')
-                        .map(type => type.trim().toLowerCase())
-                        .sort();
+                        .map(type => type.trim().toLowerCase());
                     
-                    // 정답을 소문자로 변환 및 정렬
+                    // 정답을 소문자로 변환
                     const correctClauseTypes = question.correctAnswers.a2
-                        .map(type => type.toLowerCase())
-                        .sort();
+                        .map(type => type.toLowerCase());
                     
-                    // 정렬된 배열 일치 확인 또는 길이와 내용 확인
+                    // 정답과 사용자 답변의 집합 일치 확인
                     return userClauseTypes.length === correctClauseTypes.length && 
                         userClauseTypes.every(type => correctClauseTypes.includes(type));
                 })();
