@@ -31,20 +31,20 @@ body {
 
 .timer {
   color: purple;
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin-bottom: 10px;
 }
 
 #questionBox {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   margin: 20px 0;
   white-space: pre-line;
 }
 
 #answerInput, #userNameInput {
-  width: 60%;
+  width: 70%;
   padding: 10px;
-  font-size: 1rem;
+  font-size: 1.3rem;
 }
 
 .next-btn {
