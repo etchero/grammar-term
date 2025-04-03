@@ -1,46 +1,37 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>안동 영어종결센터 기초 문법 용어 평가</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>기초 문법 용어 Test</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="quiz-card">
-            <div id="start-screen" class="screen active">
-                <div class="center-content">
-                    <h1>안동 영어종결센터 - 문법 기초 용어 평가</h1>
-                    <button id="start-btn" class="btn">준비되었으면 시작!</button>
-                </div>
-            </div>
+  <div class="container">
+    <h1 class="title">안동 영어종결센터<br><span>기초 문법 용어 Test</span></h1>
 
-            <div id="quiz-screen" class="screen">
-                <div class="quiz-header">
-                    <div id="timer">4:59</div>
-                </div>
-                <div class="quiz-body">
-                    <div id="question-number" class="question-number"></div>
-                    <div id="question" class="question-text"></div>
-                    <div class="answer-section">
-                        <input type="text" id="answer-input" placeholder="답변을 입력하세요">
-                        <button id="next-btn" class="btn">다음</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="result-screen" class="screen">
-                <div class="center-content">
-                    <h2>수고하셨습니다!</h2>
-                    <div id="final-score" class="score"></div>
-                    <div id="review" class="review-section"></div>
-                    <button id="restart-btn" class="btn">처음으로 돌아가기</button>
-                </div>
-            </div>
-        </div>
+    <!-- 이름 입력 화면 -->
+    <div id="nameContainer">
+      <p>이름을 입력하세요:</p>
+      <input type="text" id="userNameInput" placeholder="이름 입력" />
+      <button id="startBtn" class="start-btn">준비되었으면 시작!</button>
     </div>
-    <script src="script.js"></script>
+
+    <!-- 퀴즈 화면 -->
+    <div id="quizContainer" class="hidden">
+      <div id="timer" class="timer">05:00</div>
+      <div id="questionBox"></div>
+      <input type="text" id="answerInput" placeholder="여기에 답을 입력하세요" />
+      <button id="nextBtn" class="next-btn">다음</button>
+    </div>
+
+    <!-- 결과 화면 -->
+    <div id="resultContainer" class="hidden">
+      <h2 id="finalScore"></h2>
+      <p id="review"></p>
+      <button id="restartBtn" class="restart-btn">처음으로 돌아가기 (본인이 누르지 마세요)</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
